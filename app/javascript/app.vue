@@ -14,21 +14,43 @@
               <div class="card-footer-item">{{ task.mandays }} 人日</div>
             </div>
             <div class="card-footer">
-              <a class="card-footer-item">◀︎</a>
-              <a class="card-footer-item">▶︎</a>
+              <a class="card-footer-item" v-on:click="decrementStatus(task)">◀︎</a>
+              <a class="card-footer-item" v-on:click="incrementStatus(task)">▶︎</a>
             </div>
           </div>
         </div>
         <div class="column status-2">
           <div class="tags has-addons">
             <span class="tag">処理中</span>
-            <span class="tag is-dark"></span>
+            <span class="tag is-dark">{{ tasksDoing.length }}</span>
+          </div>
+          <div class="card" v-for="task in tasksDoing" v-bind:key="task.name">
+            <div class="card-content">{{ task.name }}</div>
+            <div class="card-footer">
+              <div class="card-footer-item">{{ task.assignee }}</div>
+              <div class="card-footer-item">{{ task.mandays }} 人日</div>
+            </div>
+            <div class="card-footer">
+              <a class="card-footer-item" v-on:click="decrementStatus(task)">◀︎</a>
+              <a class="card-footer-item" v-on:click="incrementStatus(task)">▶︎</a>
+            </div>
           </div>
         </div>
         <div class="column status-3">
           <div class="tags has-addons">
             <span class="tag">完了</span>
-            <span class="tag is-dark"></span>
+            <span class="tag is-dark">{{ tasksClosed.length }}</span>
+          </div>
+          <div class="card" v-for="task in tasksClosed" v-bind:key="task.name">
+            <div class="card-content">{{ task.name }}</div>
+            <div class="card-footer">
+              <div class="card-footer-item">{{ task.assignee }}</div>
+              <div class="card-footer-item">{{ task.mandays }} 人日</div>
+            </div>
+            <div class="card-footer">
+              <a class="card-footer-item" v-on:click="decrementStatus(task)">◀︎</a>
+              <a class="card-footer-item" v-on:click="incrementStatus(task)">▶︎</a>
+            </div>
           </div>
         </div>
       </div>
@@ -58,19 +80,30 @@ export default {
   data: function () {
     return {
         tasks: [
-          {name: "task1", status: "1", assignee: "🐱", mandays: "4"},
-          {name: "task2", status: "1", assignee: "🐱", mandays: "4"},
-          {name: "task3", status: "2", assignee: "🐱", mandays: "4"},
-          {name: "task4", status: "3", assignee: "🐱", mandays: "5"},
+          {name: "task1", status: 1, assignee: "🐱", mandays: "4"},
+          {name: "task2", status: 1, assignee: "🐱", mandays: "4"},
+          {name: "task3", status: 2, assignee: "🐱", mandays: "4"},
+          {name: "task4", status: 3, assignee: "🐱", mandays: "5"},
         ],
     }
   },
-
+  methods: {
+    incrementStatus: function (task) {
+      if(1 <= task.status && task.status <= 2) {
+        task.status++
+      }
+    },
+    decrementStatus: function (task) {
+      if(2 <= task.status && task.status <= 3) {
+        task.status--
+      }
+    }
+  },
   computed: {
     tasksOpen: function () {
 
       return this.tasks.filter(function (task) {
-      	return task.status === "1";
+      	return task.status === 1;
       });
 
       //return filters.open(this.tasks)
@@ -88,7 +121,6 @@ export default {
       //return filters.closed(this.tasks)
     }
   }
-
 }
 </script>
 
